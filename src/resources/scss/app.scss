@@ -1,9 +1,30 @@
 @import 'variables';
 
-.ability{
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.information {
+    text-align: center;
+    line-height: 1.5;
+    box-sizing: border-box; 
+    height: 300px;
+}
+
+.ability {
     font-size: 32px;
     color: $primary-color;
+    /* Thiết lập box sizing */
 }
+
+
+
 .course-button {
     color: #fff;
     background-color: $primary-color;
