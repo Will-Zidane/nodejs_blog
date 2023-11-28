@@ -9,16 +9,18 @@ class CourseController {
       })
       .catch(next)
   }
+
   create(req, res, next) {
+    console.log('Create method called')
     res.render('courses/create')
   }
+
   store(req, res, next) {
-    const formData = req.body
-    formData.image = `https://img.youtube.com/vi/${req.body.videoId}/sddefault.jpg`
+    req.body.image = `https://img.youtube.com/vi/${req.body.videoId}/sddefault.jpg`
     const course = new Course(req.body)
     course
       .save()
-      .then(() => res.redirect('/'))
+      .then(() => res.redirect('/me/stored/courses'))
       .catch((error) => {})
   }
   edit(req, res, next) {
@@ -44,20 +46,18 @@ class CourseController {
       .then(() => res.redirect('back'))
       .catch(next)
   }
-  
-  // DELETE /course/:id
+
+  forceDestroy(req, res, next) {
+    Course.deleteOne({ _id: req.params.id })
+      .then(() => res.redirect('back'))
+      .catch(next)
+  }
+
+  // DELETE /course/:id/restore
   restore(req, res, next) {
-    Course.findById(req.params.id)
-        .then((course) => {
-            if (!course) {
-                return res.status(404).send('Course not found');
-            }
-
-            course.restore();
-            res.redirect('back');
-        })
-        .catch(next);
-}
-
+    Course.restore({ _id: req.params.id })
+      .then(() => res.redirect('back'))
+      .catch(next)
+  }
 }
 module.exports = new CourseController()
