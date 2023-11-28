@@ -39,11 +39,25 @@ class CourseController {
   }
 
   // DELETE /course/:id
-
   destroy(req, res, next) {
-    Course.deleteOne({ _id: req.params.id })
+    Course.delete({ _id: req.params.id })
       .then(() => res.redirect('back'))
       .catch(next)
   }
+  
+  // DELETE /course/:id
+  restore(req, res, next) {
+    Course.findById(req.params.id)
+        .then((course) => {
+            if (!course) {
+                return res.status(404).send('Course not found');
+            }
+
+            course.restore();
+            res.redirect('back');
+        })
+        .catch(next);
+}
+
 }
 module.exports = new CourseController()
