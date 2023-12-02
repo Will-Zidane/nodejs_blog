@@ -39,7 +39,7 @@ body {
     margin: 8px 0;
     width:180px;
     border:1px solid ;
-    border-radius: 999px!important;
+    border-radius: 999px;
     cursor: pointer;
 }
 
@@ -47,6 +47,7 @@ body {
     background-color: #ccc;
 }
 
-.trash-title {
-    
+.checkbox-select-all-options{
+    width: 160px !important;
+    margin: 0 16px;
 }
