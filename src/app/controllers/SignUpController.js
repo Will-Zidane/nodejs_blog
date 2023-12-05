@@ -1,23 +1,26 @@
 // NewsController.js
 const User = require('../models/User')
-
+const bcrypt = require('bcrypt')
 class SignUpController {
   get(req, res, next) {
     res.render('auth/signup')
   }
 
-  create(req, re, next) {
-    res.send('Nani')
+  store(req, res, next) {
+    const user = new User({
+      name: req.body.name,
+      email: req.body.email,
+      password: bcrypt.hashSync(req.body.password,10),
+      repeatPassword: bcrypt.hashSync(req.body.repeatPassword,10) ,
+    })
+    user
+      .save()
+      .then(() => res.redirect('/signup/store'))
+      .catch((error) => {})
   }
 
-  store(req, res, next) {
-  console.log(req.body); // Check the console to see the form data
-  res.json(req.body);
-}
-
-
   show(req, res, next) {
-    res.send('SignUp details')
+    res.render('auth/store')
   }
 }
 
