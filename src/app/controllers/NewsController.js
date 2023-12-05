@@ -1,7 +1,7 @@
 // NewsController.js
 class NewsController {
   index(req, res) {
-    res.render('news')
+    res.render('login')
   }
 
   show(req, res) {
