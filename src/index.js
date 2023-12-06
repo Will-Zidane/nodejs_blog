@@ -6,7 +6,6 @@ const handlebars = require('express-handlebars')
 const methodOverride = require('method-override')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
-const passport = require('passport')
 
 require('./config/passport')
 
