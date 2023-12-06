@@ -11,7 +11,7 @@ function route(app) {
   app.use('/courses', courseRouter)
   app.use('/', siteRouter)
   app.use('/me', meRouter)
-  app.use('/login', loginRouter)
+  app.use('/login', loginRouter);
   app.use('/signup', signupRouter)
 }
 

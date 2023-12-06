@@ -6,5 +6,5 @@ const signupController = require('../app/controllers/SignUpController')
 router.get('/', signupController.get)
 router.post('/store',signupController.store)
 
-router.get('/:slug', signupController.show)
+router.get('/store', signupController.show)
 module.exports = router
