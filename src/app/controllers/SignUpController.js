@@ -1,4 +1,5 @@
 // NewsController.js
+const { alternatives } = require('joi')
 const User = require('../models/User')
 const bcrypt = require('bcrypt')
 class SignUpController {
@@ -8,15 +9,24 @@ class SignUpController {
 
   store(req, res, next) {
     const user = new User({
-      name: req.body.name,
+      name: req.body.userName,
       email: req.body.email,
-      password: bcrypt.hashSync(req.body.password,10),
-      repeatPassword: bcrypt.hashSync(req.body.repeatPassword,10) ,
+      password: bcrypt.hashSync(req.body.password, 10),
+      repeatPassword: bcrypt.hashSync(req.body.repeatPassword, 10),
     })
-    user
-      .save()
-      .then(() => res.redirect('/signup/store'))
-      .catch((error) => {})
+
+    User.findOne({ email: user.email }).exec()
+    .then(existingUser => {
+      if (existingUser) {
+        res.send('You already have a user with that email')
+      } else {
+        // If no existing user, save the new user
+        user.save()
+          .then(() => res.redirect('/signup/store'))
+          .catch(error => next(error))
+      }
+    })
+    .catch(error => next(error))
   }
 
   show(req, res, next) {

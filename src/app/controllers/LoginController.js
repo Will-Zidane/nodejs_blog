@@ -1,21 +1,36 @@
-const passport = require('passport');
-
+const User = require('../models/User')
+const bcrypt = require('bcrypt')
 class LoginController {
   login_get(req, res) {
-    res.render('auth/login');
+    res.render('auth/login')
   }
 
   login_post(req, res, next) {
-    passport.authenticate('local', {
-      successRedirect: '/dashboard', // Redirect to dashboard if authentication is successful
-      failureRedirect: '/login', // Redirect back to login page if authentication fails
-      failureFlash: true, // Enable flash messages for failure
-    })(req, res, next);
+    User.findOne({ email: req.body.email })
+      .exec()
+      .then((check) => {
+        if (!check) {
+          res.send('User cannot be found !!!!!')
+        }
+
+        return bcrypt.compare(req.body.password, check.password)
+      })
+      .then((isPasswordMatch) => {
+        if (isPasswordMatch) {
+          res.redirect('/')
+        } else {
+          res.send('Incorrect password')
+        }
+      })
+      .catch((error) => {
+        // Handle errors, for example, by passing them to the next middleware
+        next(error)
+      })
   }
 
-  show(req, res) {
-    res.send('Login details');
+  show(req, res, next) {
+    res.render('home')
   }
 }
 
-module.exports = new LoginController();
+module.exports = new LoginController()
