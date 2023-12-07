@@ -17,6 +17,7 @@ class LoginController {
       })
       .then((isPasswordMatch) => {
         if (isPasswordMatch) {
+          if(req.isAuthenticated) res.locals.isAuthenticated = req.isAuthenticated();
           res.redirect('/')
         } else {
           res.send('Incorrect password')
@@ -29,7 +30,7 @@ class LoginController {
   }
 
   show(req, res, next) {
-    res.render('home')
+    res.render('home',{isAuthenticated: req.isAuthenticated()})
   }
 }
 

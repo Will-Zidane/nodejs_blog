@@ -22,7 +22,9 @@ class SignUpController {
       } else {
         // If no existing user, save the new user
         user.save()
-          .then(() => res.redirect('/signup/store'))
+          .then(() => {
+            if(req.isAuthenticated) res.locals.isAuthenticated = req.isAuthenticated();
+            res.redirect('/signup/store')})
           .catch(error => next(error))
       }
     })
