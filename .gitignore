@@ -1,5 +1,6 @@
 .vscode
-
+.prettierignore
+.prettierrc
 src/public/css/
 
 node_modules/
