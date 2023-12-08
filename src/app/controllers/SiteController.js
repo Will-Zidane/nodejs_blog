@@ -14,5 +14,10 @@ class SiteController {
   search(req, res) {
     res.render('search')
   }
+  logout(req, res) {
+      if (err) { return next(err); }
+      res.redirect('/login');
+    };
 }
+
 module.exports = new SiteController()

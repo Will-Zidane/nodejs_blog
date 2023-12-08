@@ -15,24 +15,27 @@ class SignUpController {
       repeatPassword: bcrypt.hashSync(req.body.repeatPassword, 10),
     })
 
-    User.findOne({ email: user.email }).exec()
-    .then(existingUser => {
-      if (existingUser) {
-        res.send('You already have a user with that email')
-      } else {
-        // If no existing user, save the new user
-        user.save()
-          .then(() => {
-            if(req.isAuthenticated) res.locals.isAuthenticated = req.isAuthenticated();
-            res.redirect('/signup/store')})
-          .catch(error => next(error))
-      }
-    })
-    .catch(error => next(error))
+    User.findOne({ email: user.email })
+      .exec()
+      .then(existingUser => {
+        if (existingUser) {
+          res.send('You already have a user with that email')
+        } else {
+          // If no existing user, save the new user
+          user.save()
+            .then(() => {
+              if (req.isAuthenticated()) {
+                res.locals.isAuthenticated = req.isAuthenticated();
+              }
+              res.redirect('/signup/store')})
+            .catch(error => next(error))
+        }
+      })
+      .catch(error => next(error))
   }
 
   show(req, res, next) {
-    res.render('auth/store')
+    res.render('auth/store', { isAuthenticated: req.isAuthenticated() });
   }
 }
 
