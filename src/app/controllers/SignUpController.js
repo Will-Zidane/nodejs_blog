@@ -4,6 +4,7 @@ const User = require('../models/User')
 const bcrypt = require('bcrypt')
 class SignUpController {
   get(req, res, next) {
+    res.locals.isAuthenticated = false;
     res.render('auth/signup')
   }
 
@@ -24,9 +25,7 @@ class SignUpController {
           // If no existing user, save the new user
           user.save()
             .then(() => {
-              if (req.isAuthenticated()) {
-                res.locals.isAuthenticated = req.isAuthenticated();
-              }
+              res.locals.isAuthenticated = req.body.isAuthenticated === 'true';
               res.redirect('/signup/store')})
             .catch(error => next(error))
         }
@@ -36,6 +35,7 @@ class SignUpController {
 
   show(req, res, next) {
     res.render('auth/store', { isAuthenticated: req.isAuthenticated() });
+
   }
 }
 

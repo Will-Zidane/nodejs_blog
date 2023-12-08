@@ -7,3 +7,10 @@
     <a class="btn btn-primary btn-lg" href="/login" role="button">Login</a>
   </p>
 </div>
+
+<script>
+  function setIsAuthenticatedFalse() {
+    // Set isAuthenticated to false when clicking the Register button
+    <%= locals.isAuthenticated = false %>
+  }
+</script>

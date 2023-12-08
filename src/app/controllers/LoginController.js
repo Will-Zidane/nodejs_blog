@@ -2,33 +2,40 @@ const User = require('../models/User')
 const bcrypt = require('bcrypt')
 class LoginController {
   login_get(req, res) {
-    res.render('auth/login', { isAuthenticated: req.isAuthenticated() })
+    res.render('home', { isAuthenticated: req.isAuthenticated(), user: req.session.user });
   }
 
   login_post(req, res, next) {
-    let foundUser; // Declare a variable to store the found user
+    let foundUser;
   
     User.findOne({ email: req.body.email })
       .exec()
       .then((check) => {
         if (!check) {
-          res.send('User cannot be found !!!!!');
+          res.send('error', 'User cannot be found!');
+          return res.redirect('/login');
         }
-        foundUser = check; // Store the found user in the variable
+  
+        foundUser = check;
         return bcrypt.compare(req.body.password, check.password);
       })
       .then((isPasswordMatch) => {
         if (isPasswordMatch) {
-          // Log in the user and set isAuthenticated to true
           req.login(foundUser, (err) => {
             if (err) {
               return next(err);
             }
             res.locals.isAuthenticated = req.isAuthenticated();
-            res.redirect('/');
+            req.session.user = {
+              id: foundUser._id,
+              name: foundUser.name,
+              email: foundUser.email,
+            };
+            return res.redirect('/');
           });
         } else {
-          res.send('Incorrect password');
+          res.send('error', 'Incorrect password');
+          return res.redirect('/login');
         }
       })
       .catch((error) => {
@@ -36,6 +43,7 @@ class LoginController {
         next(error);
       });
   }
+  
   
 
   show(req, res, next) {
