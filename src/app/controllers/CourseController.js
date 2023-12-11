@@ -17,12 +17,32 @@ class CourseController {
 
   store(req, res, next) {
     req.body.image = `https://img.youtube.com/vi/${req.body.videoId}/sddefault.jpg`
-    const course = new Course(req.body)
-    course
-      .save()
-      .then(() => res.redirect('/me/stored/courses'))
-      .catch((error) => {})
+  
+    Course.findOne({})
+      .sort({ _id: 'desc' })
+      .then((latestCourse) => {
+        if (latestCourse) {
+          req.body._id = latestCourse._id + 1;
+        } else {
+          req.body._id = 1; // Default value if there are no courses in the database yet
+        }
+  
+        const course = new Course(req.body);
+  
+        course
+          .save()
+          .then(() => res.redirect('/me/stored/courses'))
+          .catch((error) => {
+            console.error('Error saving course:', error.message);
+            next(error);
+          });
+      })
+      .catch((error) => {
+        console.error('Error finding latest course:', error.message);
+        next(error);
+      });
   }
+  
 
   edit(req, res, next) {
     Course.findById(req.params.id)

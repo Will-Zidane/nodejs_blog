@@ -4,13 +4,13 @@
   <hr class="my-4">
   <p>Now let's have a good time with our courses about IT </p>
   <p class="lead">
-    <a class="btn btn-primary btn-lg" href="/login" role="button">Login</a>
+    <a class="btn btn-primary btn-lg" href="/logout" role="button">Login</a>
   </p>
 </div>
 
 <script>
   function setIsAuthenticatedFalse() {
     // Set isAuthenticated to false when clicking the Register button
-    <%= locals.isAuthenticated = false %>
+    <% locals.isAuthenticated = false %>;
   }
 </script>
