@@ -1,23 +1,38 @@
-const Course = require('../models/Course')
-const { multipleMongooseToObject } = require('../../util/mongoose')
+const Course = require('../models/Course');
+const { multipleMongooseToObject } = require('../../util/mongoose');
+
+// SiteController class to handle site-related operations
 class SiteController {
+  // GET request handler for rendering the home page
   index(req, res, next) {
+    // Retrieve all courses from the database
     Course.find({})
       .then((courses) => {
-        courses = courses.map((course) => course.toObject())
+        // Convert each course to a plain JavaScript object
+        courses = courses.map((course) => course.toObject());
+        
+        // Render the 'home' view with the retrieved courses
         res.render('home', {
           courses: multipleMongooseToObject(courses),
-        })
+        });
       })
-      .catch(next)
+      .catch(next);
   }
+
+  // GET request handler for rendering the search page
   search(req, res) {
-    res.render('search')
+    res.render('search');
   }
-  logout(req, res) {
-      if (err) { return next(err); }
-      res.redirect('/login');
-    };
+
+  // Logout handler, redirects to the login page
+  logout(req, res, next) {
+    // Check for errors and redirect to the login page
+    if (err) {
+      return next(err);
+    }
+    res.redirect('/login');
+  };
 }
 
-module.exports = new SiteController()
+// Export an instance of SiteController
+module.exports = new SiteController();
